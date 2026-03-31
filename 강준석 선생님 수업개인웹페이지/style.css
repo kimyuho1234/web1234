@@ -33,12 +33,12 @@ body.dark .header {
   border-bottom: 1px solid #333;
 }
 
-body.dark .nav-btn {
+body.dark .nav_btn {
   color: white;
 }
 
-body.dark .nav-btn.active,
-body.dark .nav-btn:hover {
+body.dark .nav_btn.active,
+body.dark .nav_btn:hover {
   background: #2b7cff;
   color: white;
 }
