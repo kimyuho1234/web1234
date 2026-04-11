@@ -129,27 +129,66 @@
         </section>
 
         <section class="page" id="login">
-            <h2>Login</h2>
-            <div class="card auth_card">
-                <div class="auth_tabs">
-                    <button type="button" id="showLoginBtn" class="tab_btn active">로그인</button>
-                    <button type="button" id="showRegisterBtn" class="tab_btn">회원가입</button>
+            <div class="auth-wrapper">
+                <div class="auth-card">
+                    <h2 class="auth-title">Welcome Back</h2>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="login-email" class="form-control" placeholder="이메일을 입력하세요">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="login-password" class="form-control" placeholder="비밀번호를 입력하세요"
+                            onkeyup="if(event.key==='Enter') handleLogin()">
+                        <div id="login-error" class="error-msg">이메일 또는 비밀번호가 일치하지 않습니다.</div>
+                    </div>
+
+                    <button class="btn btn-full" onclick="handleLogin()">Login</button>
+
+                    <div class="auth-footer">
+                        계정이 없으신가요?
+                        <a onclick="goRegister()">회원가입 (Sign up)</a>
+                    </div>
                 </div>
+            </div>
+        </section>
 
-                <form id="loginForm" class="auth_form">
-                    <input type="text" id="loginUsername" placeholder="아이디" required>
-                    <input type="password" id="loginPassword" placeholder="비밀번호" required>
-                    <button type="submit" class="primary_btn">로그인</button>
-                </form>
+        <section class="page" id="signup">
+            <div class="auth-wrapper">
+                <div class="auth-card">
+                    <h2 class="auth-title">Create Account</h2>
 
-                <form id="registerForm" class="auth_form hidden">
-                    <input type="text" id="registerUsername" placeholder="새 아이디" required>
-                    <input type="password" id="registerPassword" placeholder="새 비밀번호" required>
-                    <input type="text">
-                    <button type="submit" class="primary_btn">회원가입</button>
-                </form>
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" id="signup-name" class="form-control" placeholder="이름을 입력하세요">
+                    </div>
 
-                <p id="authStatus"></p>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="signup-email" class="form-control" placeholder="사용할 이메일을 입력하세요">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="signup-password" class="form-control" placeholder="비밀번호 입력">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="signup-password-confirm" class="form-control" placeholder="비밀번호 재입력"
+                            onkeyup="if(event.key==='Enter') handleSignup()">
+                        <div id="signup-error" class="error-msg">비밀번호가 일치하지 않습니다.</div>
+                    </div>
+
+                    <button class="btn btn-full" onclick="handleSignup()">Sign Up</button>
+
+                    <div class="auth-footer">
+                        이미 계정이 있으신가요?
+                        <a onclick="goLogin()">로그인 (Login)</a>
+                    </div>
+                </div>
             </div>
         </section>
 
