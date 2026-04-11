@@ -55,7 +55,7 @@ export default async function handler(req, res) {
       isPinned: false,
       status: "active",
       authorId: user.role === "admin" ? "admin-fixed-id" : new ObjectId(user.id),
-      authorName: user.username,
+      authorName: user.name || user.username,
       createdAt: new Date(),
       updatedAt: new Date()
     };

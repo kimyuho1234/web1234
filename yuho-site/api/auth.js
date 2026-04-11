@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     const { action } = req.query;
 
     if (action === "register") {
-      const { username, password } = req.body;
+      const { name, username, password } = req.body;
 
       if (!username || !password) {
         return res.status(400).json({ message: "아이디와 비밀번호를 입력하세요." });
@@ -31,6 +31,7 @@ export default async function handler(req, res) {
       const passwordHash = await bcrypt.hash(password, 10);
 
       const result = await db.collection("users").insertOne({
+        name,
         username,
         passwordHash,
         role: "user",
@@ -55,6 +56,7 @@ export default async function handler(req, res) {
         const adminUser = {
           _id: "admin-fixed-id",
           username: ADMIN_USERNAME,
+          name: "관리자",
           role: "admin"
         };
 
@@ -90,6 +92,7 @@ export default async function handler(req, res) {
         user: {
           _id: user._id.toString(),
           username: user.username,
+          name: user.name || user.username,
           role: "user"
         }
       });
@@ -128,6 +131,7 @@ export default async function handler(req, res) {
       user: {
         _id: dbUser._id.toString(),
         username: dbUser.username,
+        name: dbUser.name || dbUser.username,
         role: dbUser.role
       }
     });

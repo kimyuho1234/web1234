@@ -110,22 +110,15 @@ window.addEventListener("keydown", function (event) {
 
 showPage(0);
 
-/* 로그인 기능 */
+/* 로그인 / 회원가입 / 관리자 */
 let authToken = localStorage.getItem("token") || "";
 let currentUser = null;
-
-const loginForm = document.getElementById("loginForm");
-const registerForm = document.getElementById("registerForm");
-const authStatus = document.getElementById("authStatus");
-
-const showLoginBtn = document.getElementById("showLoginBtn");
-const showRegisterBtn = document.getElementById("showRegisterBtn");
 
 const profileNavBtn = document.getElementById("profileNavBtn");
 const adminNavBtn = document.getElementById("adminNavBtn");
 const adminPanel = document.getElementById("adminPanel");
 
-function updateNavByRole() {
+function updateAuthNav() {
   if (!profileNavBtn || !adminNavBtn) return;
 
   if (!currentUser) {
@@ -134,133 +127,189 @@ function updateNavByRole() {
     return;
   }
 
+  const displayName = currentUser.name || currentUser.username;
+
+  profileNavBtn.textContent = `${displayName}님`;
+
   if (currentUser.role === "admin") {
-    profileNavBtn.textContent = "Admin Profile";
     adminNavBtn.classList.remove("hidden");
   } else {
-    profileNavBtn.textContent = "User Profile";
     adminNavBtn.classList.add("hidden");
   }
 }
 
-function renderAuthStatus() {
-  if (!authStatus) return;
+window.goLogin = function () {
+  const idx = [...pages].findIndex((page) => page.id === "login");
+  if (idx !== -1) showPage(idx);
+};
 
-  if (!currentUser) {
-    authStatus.textContent = "로그인하지 않았습니다.";
-    updateNavByRole();
-    return;
-  }
-
-  authStatus.innerHTML = `
-    로그인되었습니다: <strong>${currentUser.username}</strong> (${currentUser.role})
-    <button id="logoutBtn" class="small_btn" style="margin-left:10px;">로그아웃</button>
-  `;
-
-  updateNavByRole();
-
-  document.getElementById("logoutBtn")?.addEventListener("click", () => {
-    localStorage.removeItem("token");
-    authToken = "";
-    currentUser = null;
-    renderAuthStatus();
-    loadAdminPanel();
-  });
-}
-
-showLoginBtn?.addEventListener("click", () => {
-  showLoginBtn.classList.add("active");
-  showRegisterBtn.classList.remove("active");
-  loginForm.classList.remove("hidden");
-  registerForm.classList.add("hidden");
-});
-
-showRegisterBtn?.addEventListener("click", () => {
-  showRegisterBtn.classList.add("active");
-  showLoginBtn.classList.remove("active");
-  registerForm.classList.remove("hidden");
-  loginForm.classList.add("hidden");
-});
+window.goRegister = function () {
+  const idx = [...pages].findIndex((page) => page.id === "signup");
+  if (idx !== -1) showPage(idx);
+};
 
 async function fetchMe() {
   if (!authToken) {
     currentUser = null;
-    renderAuthStatus();
+    updateAuthNav();
     return;
   }
 
-  const res = await fetch("/api/auth", {
-    headers: {
-      Authorization: `Bearer ${authToken}`
-    }
-  });
+  try {
+    const res = await fetch("/api/auth", {
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      }
+    });
 
-  if (!res.ok) {
+    if (!res.ok) {
+      localStorage.removeItem("token");
+      authToken = "";
+      currentUser = null;
+      updateAuthNav();
+      return;
+    }
+
+    const data = await res.json();
+    currentUser = data.user;
+    updateAuthNav();
+  } catch (error) {
+    console.error("fetchMe 오류:", error);
     localStorage.removeItem("token");
     authToken = "";
     currentUser = null;
-    renderAuthStatus();
-    return;
+    updateAuthNav();
   }
-
-  const data = await res.json();
-  currentUser = data.user;
-  renderAuthStatus();
 }
 
-loginForm?.addEventListener("submit", async (e) => {
-  e.preventDefault();
+window.handleLogin = async function () {
+  const username = document.getElementById("login-email").value.trim();
+  const password = document.getElementById("login-password").value.trim();
+  const loginError = document.getElementById("login-error");
 
-  const username = document.getElementById("loginUsername").value.trim();
-  const password = document.getElementById("loginPassword").value.trim();
+  if (loginError) loginError.style.display = "none";
 
-  const res = await fetch("/api/auth?action=login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
-  });
-
-  const data = await res.json();
-
-  if (!res.ok) {
-    alert(data.message || "로그인 실패");
+  if (!username || !password) {
+    if (loginError) {
+      loginError.textContent = "이메일과 비밀번호를 입력해주세요.";
+      loginError.style.display = "block";
+    }
     return;
   }
 
-  authToken = data.token;
-  localStorage.setItem("token", authToken);
+  try {
+    const res = await fetch("/api/auth?action=login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ username, password })
+    });
 
-  await fetchMe();
-  await loadAdminPanel();
-  loginForm.reset();
-});
+    const text = await res.text();
+    const data = text ? JSON.parse(text) : {};
 
-registerForm?.addEventListener("submit", async (e) => {
-  e.preventDefault();
+    if (!res.ok) {
+      if (loginError) {
+        loginError.textContent = data.message || "이메일 또는 비밀번호가 일치하지 않습니다.";
+        loginError.style.display = "block";
+      }
+      return;
+    }
 
-  const username = document.getElementById("registerUsername").value.trim();
-  const password = document.getElementById("registerPassword").value.trim();
+    authToken = data.token;
+    localStorage.setItem("token", authToken);
+    currentUser = data.user;
 
-  const res = await fetch("/api/auth?action=register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
-  });
+    updateAuthNav();
 
-  const data = await res.json();
-  alert(data.message || "회원가입 완료");
+    document.getElementById("login-email").value = "";
+    document.getElementById("login-password").value = "";
 
-  if (res.ok) {
-    registerForm.reset();
+    alert("로그인되었습니다.");
 
-    showLoginBtn?.classList.add("active");
-    showRegisterBtn?.classList.remove("active");
-    loginForm?.classList.remove("hidden");
-    registerForm?.classList.add("hidden");
-
-    authStatus.textContent = "회원가입이 완료되었습니다. 로그인해주세요.";
+    showPage(0);
+    await loadPosts();
+    await loadAdminPanel();
+  } catch (error) {
+    console.error("로그인 오류:", error);
+    if (loginError) {
+      loginError.textContent = "로그인 중 오류가 발생했습니다.";
+      loginError.style.display = "block";
+    }
   }
-});
+};
+
+window.handleSignup = async function () {
+  const name = document.getElementById("signup-name").value.trim();
+  const username = document.getElementById("signup-email").value.trim();
+  const password = document.getElementById("signup-password").value.trim();
+  const confirmPassword = document.getElementById("signup-password-confirm").value.trim();
+  const signupError = document.getElementById("signup-error");
+
+  if (signupError) signupError.style.display = "none";
+
+  if (!name || !username || !password || !confirmPassword) {
+    if (signupError) {
+      signupError.textContent = "모든 항목을 입력해주세요.";
+      signupError.style.display = "block";
+    }
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    if (signupError) {
+      signupError.textContent = "비밀번호가 일치하지 않습니다.";
+      signupError.style.display = "block";
+    }
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/auth?action=register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name, username, password })
+    });
+
+    const text = await res.text();
+    const data = text ? JSON.parse(text) : {};
+
+    if (!res.ok) {
+      if (signupError) {
+        signupError.textContent = data.message || "회원가입에 실패했습니다.";
+        signupError.style.display = "block";
+      }
+      return;
+    }
+
+    alert("회원가입이 완료되었습니다.");
+
+    document.getElementById("signup-name").value = "";
+    document.getElementById("signup-email").value = "";
+    document.getElementById("signup-password").value = "";
+    document.getElementById("signup-password-confirm").value = "";
+
+    goLogin();
+  } catch (error) {
+    console.error("회원가입 오류:", error);
+    if (signupError) {
+      signupError.textContent = "회원가입 중 오류가 발생했습니다.";
+      signupError.style.display = "block";
+    }
+  }
+};
+
+window.handleLogout = function () {
+  localStorage.removeItem("token");
+  authToken = "";
+  currentUser = null;
+  updateAuthNav();
+  alert("로그아웃 되었습니다.");
+  showPage(0);
+};
 
 async function loadAdminPanel() {
   if (!adminPanel) return;
@@ -270,32 +319,37 @@ async function loadAdminPanel() {
     return;
   }
 
-  const res = await fetch("/api/admin?action=dashboard", {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${authToken}`
+  try {
+    const res = await fetch("/api/admin?action=dashboard", {
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      adminPanel.innerHTML = "<p>관리자 정보를 불러오지 못했습니다.</p>";
+      return;
     }
-  });
 
-  const data = await res.json();
-
-  if (!res.ok) {
+    adminPanel.innerHTML = `
+      <div class="admin_box">
+        <h4>삭제된 글</h4>
+        <pre>${JSON.stringify(data.deletedPosts, null, 2)}</pre>
+      </div>
+      <div class="admin_box">
+        <h4>수정 / 삭제 이력</h4>
+        <pre>${JSON.stringify(data.auditLogs, null, 2)}</pre>
+      </div>
+    `;
+  } catch (error) {
+    console.error("관리자 패널 오류:", error);
     adminPanel.innerHTML = "<p>관리자 정보를 불러오지 못했습니다.</p>";
-    return;
   }
-
-  adminPanel.innerHTML = `
-    <div class="admin_box">
-      <h4>삭제된 글</h4>
-      <pre>${JSON.stringify(data.deletedPosts, null, 2)}</pre>
-    </div>
-    <div class="admin_box">
-      <h4>수정 / 삭제 이력</h4>
-      <pre>${JSON.stringify(data.auditLogs, null, 2)}</pre>
-    </div>
-  `;
 }
 
 fetchMe().then(() => {
+  loadPosts();
   loadAdminPanel();
 });
