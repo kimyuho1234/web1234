@@ -111,32 +111,24 @@ window.addEventListener("keydown", function (event) {
 showPage(0);
 
 /* 로그인 / 회원가입 / 관리자 */
-let authToken = localStorage.getItem("token") || "";
-let currentUser = null;
 
-const profileNavBtn = document.getElementById("profileNavBtn");
-const adminNavBtn = document.getElementById("adminNavBtn");
-const adminPanel = document.getElementById("adminPanel");
-
-function updateAuthNav() {
-  if (!profileNavBtn || !adminNavBtn) return;
-
-  if (!currentUser) {
-    profileNavBtn.textContent = "Login";
-    adminNavBtn.classList.add("hidden");
-    return;
-  }
-
-  const displayName = currentUser.name || currentUser.username;
-
-  profileNavBtn.textContent = `${displayName}님`;
-
-  if (currentUser.role === "admin") {
-    adminNavBtn.classList.remove("hidden");
-  } else {
-    adminNavBtn.classList.add("hidden");
-  }
+if (!localStorage.getItem(DB_USERS)) {
+  localStorage.setItem(
+    DB_USERS,
+    JSON.stringify([
+      { name: "김유호", email: "test@test.com", password: "1234", role: "admin" }
+    ])
+  );
 }
+function getCurrentUser() { return JSON.parse(localStorage.getItem(DB_CURRENT_USER)); }
+function renderHeaderAuth() {
+  const user = getCurrentUser();
+  const authArea = document.getElementById('header-auth-area');
+  if (user) authArea.innerHTML = `<span>${user.name}님</span> <a onclick="handleLogout()">Logout</a>`;
+  else authArea.innerHTML = `<a class="login-btn" onclick="goLogin()">Login</a>`;
+}
+
+renderHeaderAuth();
 
 window.goLogin = function () {
   const idx = [...pages].findIndex((page) => page.id === "login");
@@ -148,208 +140,86 @@ window.goRegister = function () {
   if (idx !== -1) showPage(idx);
 };
 
-async function fetchMe() {
-  if (!authToken) {
-    currentUser = null;
-    updateAuthNav();
-    return;
-  }
+function fillAuthorName() {
+  const user = getCurrentUser();
+  const input = document.getElementById("post-author");
 
-  try {
-    const res = await fetch("/api/auth", {
-      headers: {
-        Authorization: `Bearer ${authToken}`
-      }
-    });
-
-    if (!res.ok) {
-      localStorage.removeItem("token");
-      authToken = "";
-      currentUser = null;
-      updateAuthNav();
-      return;
-    }
-
-    const data = await res.json();
-    currentUser = data.user;
-    updateAuthNav();
-  } catch (error) {
-    console.error("fetchMe 오류:", error);
-    localStorage.removeItem("token");
-    authToken = "";
-    currentUser = null;
-    updateAuthNav();
+  if (user && input) {
+    input.value = user.name || user.username;
   }
 }
 
-window.handleLogin = async function () {
-  const username = document.getElementById("login-email").value.trim();
-  const password = document.getElementById("login-password").value.trim();
-  const loginError = document.getElementById("login-error");
-
-  if (loginError) loginError.style.display = "none";
-
-  if (!username || !password) {
-    if (loginError) {
-      loginError.textContent = "이메일과 비밀번호를 입력해주세요.";
-      loginError.style.display = "block";
-    }
-    return;
-  }
-
-  try {
-    const res = await fetch("/api/auth?action=login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ username, password })
-    });
-
-    const text = await res.text();
-    const data = text ? JSON.parse(text) : {};
-
-    if (!res.ok) {
-      if (loginError) {
-        loginError.textContent = data.message || "이메일 또는 비밀번호가 일치하지 않습니다.";
-        loginError.style.display = "block";
-      }
-      return;
-    }
-
-    authToken = data.token;
-    localStorage.setItem("token", authToken);
-    currentUser = data.user;
-
-    updateAuthNav();
-
-    document.getElementById("login-email").value = "";
-    document.getElementById("login-password").value = "";
-
-    alert("로그인되었습니다.");
-
-    showPage(0);
-    await loadPosts();
-    await loadAdminPanel();
-  } catch (error) {
-    console.error("로그인 오류:", error);
-    if (loginError) {
-      loginError.textContent = "로그인 중 오류가 발생했습니다.";
-      loginError.style.display = "block";
-    }
+window.goBoardWrite = function () {
+  const idx = [...pages].findIndex((page) => page.id === "board-write");
+  if (idx !== -1) {
+    showPage(idx);
+    fillAuthorName();
   }
 };
 
-window.handleSignup = async function () {
+window.handleSignup = function () {
   const name = document.getElementById("signup-name").value.trim();
-  const username = document.getElementById("signup-email").value.trim();
+  const email = document.getElementById("signup-email").value.trim();
   const password = document.getElementById("signup-password").value.trim();
   const confirmPassword = document.getElementById("signup-password-confirm").value.trim();
   const signupError = document.getElementById("signup-error");
 
   if (signupError) signupError.style.display = "none";
 
-  if (!name || !username || !password || !confirmPassword) {
-    if (signupError) {
-      signupError.textContent = "모든 항목을 입력해주세요.";
-      signupError.style.display = "block";
-    }
+  if (!name || !email || !password || !confirmPassword) {
+    signupError.textContent = "모든 항목을 입력해주세요.";
+    signupError.style.display = "block";
     return;
   }
 
   if (password !== confirmPassword) {
-    if (signupError) {
-      signupError.textContent = "비밀번호가 일치하지 않습니다.";
-      signupError.style.display = "block";
-    }
+    signupError.textContent = "비밀번호가 일치하지 않습니다.";
+    signupError.style.display = "block";
     return;
   }
 
-  try {
-    const res = await fetch("/api/auth?action=register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ name, username, password })
-    });
+  const users = JSON.parse(localStorage.getItem(DB_USERS)) || [];
 
-    const text = await res.text();
-    const data = text ? JSON.parse(text) : {};
-
-    if (!res.ok) {
-      if (signupError) {
-        signupError.textContent = data.message || "회원가입에 실패했습니다.";
-        signupError.style.display = "block";
-      }
-      return;
-    }
-
-    alert("회원가입이 완료되었습니다.");
-
-    document.getElementById("signup-name").value = "";
-    document.getElementById("signup-email").value = "";
-    document.getElementById("signup-password").value = "";
-    document.getElementById("signup-password-confirm").value = "";
-
-    goLogin();
-  } catch (error) {
-    console.error("회원가입 오류:", error);
-    if (signupError) {
-      signupError.textContent = "회원가입 중 오류가 발생했습니다.";
-      signupError.style.display = "block";
-    }
+  if (users.find(u => u.email === email)) {
+    signupError.textContent = "이미 존재하는 이메일입니다.";
+    signupError.style.display = "block";
+    return;
   }
+
+  users.push({ name, email, password, role: "user" });
+
+  localStorage.setItem(DB_USERS, JSON.stringify(users));
+
+  alert("회원가입이 완료되었습니다.");
+  goLogin();
 };
 
-window.handleLogout = function () {
-  localStorage.removeItem("token");
-  authToken = "";
-  currentUser = null;
-  updateAuthNav();
-  alert("로그아웃 되었습니다.");
+window.handleLogin = function () {
+  const email = document.getElementById("login-email").value.trim();
+  const password = document.getElementById("login-password").value.trim();
+  const loginError = document.getElementById("login-error");
+
+  if (loginError) loginError.style.display = "none";
+
+  const users = JSON.parse(localStorage.getItem(DB_USERS)) || [];
+  const user = users.find(u => u.email === email && u.password === password);
+
+  if (!user) {
+    loginError.textContent = "이메일 또는 비밀번호가 일치하지 않습니다.";
+    loginError.style.display = "block";
+    return;
+  }
+
+  localStorage.setItem(DB_CURRENT_USER, JSON.stringify(user));
+
+  alert("로그인되었습니다.");
+  renderHeaderAuth();
   showPage(0);
 };
 
-async function loadAdminPanel() {
-  if (!adminPanel) return;
-
-  if (!currentUser || currentUser.role !== "admin") {
-    adminPanel.innerHTML = "<p>관리자만 볼 수 있습니다.</p>";
-    return;
-  }
-
-  try {
-    const res = await fetch("/api/admin?action=dashboard", {
-      headers: {
-        Authorization: `Bearer ${authToken}`
-      }
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      adminPanel.innerHTML = "<p>관리자 정보를 불러오지 못했습니다.</p>";
-      return;
-    }
-
-    adminPanel.innerHTML = `
-      <div class="admin_box">
-        <h4>삭제된 글</h4>
-        <pre>${JSON.stringify(data.deletedPosts, null, 2)}</pre>
-      </div>
-      <div class="admin_box">
-        <h4>수정 / 삭제 이력</h4>
-        <pre>${JSON.stringify(data.auditLogs, null, 2)}</pre>
-      </div>
-    `;
-  } catch (error) {
-    console.error("관리자 패널 오류:", error);
-    adminPanel.innerHTML = "<p>관리자 정보를 불러오지 못했습니다.</p>";
-  }
-}
-
-fetchMe().then(() => {
-  loadPosts();
-  loadAdminPanel();
-});
+window.handleLogout = function () {
+  localStorage.removeItem(DB_CURRENT_USER);
+  renderHeaderAuth();
+  alert("로그아웃 되었습니다.");
+  showPage(0);
+};
