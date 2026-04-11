@@ -1,3 +1,6 @@
+const DB_USERS = "yuho_users";
+const DB_CURRENT_USER = "yuho_current_user";
+
 const typingText = "웹 개발을 배우고 있는 학생으로, 다양한 기술을 익히며 꾸준히 성장하는 프론트엔드 개발자를 목표로 하고 있습니다.";
 const typingTarget = document.getElementById("typing");
 
