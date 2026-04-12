@@ -1016,3 +1016,15 @@ body:not(.dark) .auth-footer {
   color: #2b7cff;
   border: 1px solid rgba(43, 124, 255, 0.4);
 }
+
+.about_link {
+  color: #2b7cff;
+  font-weight: 700;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.about_link:hover {
+  color: #00c6ff;
+  text-decoration: underline;
+}

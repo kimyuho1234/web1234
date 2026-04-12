@@ -116,6 +116,20 @@ window.addEventListener("keydown", function (event) {
 
 showPage(0);
 
+// ✅ 여기다 넣어라 (이 위치가 정답)
+const myName = document.getElementById("myName");
+const myInfo = document.getElementById("myInfo");
+
+if (myName && myInfo) {
+  myName.addEventListener("click", function () {
+    if (myInfo.style.display === "none") {
+      myInfo.style.display = "block";
+    } else {
+      myInfo.style.display = "none";
+    }
+  });
+}
+
 function showPageById(pageId) {
   const pageIndex = [...pages].findIndex((page) => page.id === pageId);
   if (pageIndex !== -1) {
@@ -548,7 +562,7 @@ function loadAdminPanel() {
 
     return `
       <div class="admin_box">
-        <h4>계정 ${index + 1}</h4>
+        <h4>계정 ${index + 1} ${user.role === "admin" ? "👑" : "👤"} </h4>
         <div class="admin_user_row"><strong>이름:</strong> ${user.name}</div>
         <div class="admin_user_row"><strong>이메일:</strong> ${user.email}</div>
         <div class="admin_user_row">
@@ -771,6 +785,8 @@ window.adminRemoveAdmin = function (email) {
   loadPosts();
   alert("관리자 권한이 해제되었습니다.");
 };
+
+
 
 loadPosts();
 loadAdminPanel();
