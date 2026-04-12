@@ -413,12 +413,10 @@ body.dark .portfolio_card {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    120deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.22) 35%,
-    transparent 70%
-  );
+  background: linear-gradient(120deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.22) 35%,
+      transparent 70%);
   transform: translateX(-100%);
   transition: transform 0.8s ease;
 }
@@ -509,7 +507,7 @@ body.dark #postForm textarea {
 .post_item {
   padding: 18px;
   border-radius: 18px;
-  background: linear-gradient(135deg, rgba(43,124,255,0.08), rgba(0,198,255,0.04));
+  background: linear-gradient(135deg, rgba(43, 124, 255, 0.08), rgba(0, 198, 255, 0.04));
   border: 1px solid rgba(43, 124, 255, 0.14);
   box-shadow: 0 10px 24px rgba(43, 124, 255, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -521,8 +519,8 @@ body.dark #postForm textarea {
 }
 
 body.dark .post_item {
-  background: linear-gradient(135deg, rgba(43,124,255,0.12), rgba(0,198,255,0.05));
-  border-color: rgba(255,255,255,0.08);
+  background: linear-gradient(135deg, rgba(43, 124, 255, 0.12), rgba(0, 198, 255, 0.05));
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .post_item h4 {
@@ -551,6 +549,7 @@ body.dark .post_item {
     transform: translateY(16px) scale(0.985);
     filter: blur(4px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -679,7 +678,7 @@ body.dark #noticeForm textarea {
 
 .post_item.notice {
   border: 1px solid rgba(255, 200, 0, 0.35);
-  background: linear-gradient(135deg, rgba(255, 208, 0, 0.14), rgba(255,255,255,0.06));
+  background: linear-gradient(135deg, rgba(255, 208, 0, 0.14), rgba(255, 255, 255, 0.06));
 }
 
 #adminPanel {
@@ -824,6 +823,7 @@ body.dark #noticeForm textarea {
   color: #2b7cff;
   margin-bottom: 10px;
 }
+
 .auth-wrapper {
   width: 100%;
   display: flex;
@@ -951,7 +951,7 @@ body:not(.dark) .auth-footer {
 .auth-nav button {
   border: none;
   background: transparent;
-  color: #888;
+  color: #333;
   cursor: pointer;
   font-size: 15px;
   font-weight: 600;
@@ -959,5 +959,60 @@ body:not(.dark) .auth-footer {
 
 .auth-nav a:hover,
 .auth-nav button:hover {
-  color: white;
+  color: gray;
+}
+
+.board_list_card {
+  height: 520px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 10px;
+}
+
+.board_list_card::-webkit-scrollbar {
+  width: 10px;
+}
+
+.board_list_card::-webkit-scrollbar-thumb {
+  background: rgba(43, 124, 255, 0.35);
+  border-radius: 999px;
+}
+
+.board_list_card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin_section_title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #2b7cff;
+  margin: 6px 0 10px;
+}
+
+.admin_user_row {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.role_badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-left: 6px;
+}
+
+/* 관리자 (빨간 느낌) */
+.admin_badge {
+  background: rgba(255, 80, 80, 0.15);
+  color: #ff4d4d;
+  border: 1px solid rgba(255, 80, 80, 0.4);
+}
+
+/* 일반 사용자 (파란 느낌) */
+.user_badge {
+  background: rgba(43, 124, 255, 0.15);
+  color: #2b7cff;
+  border: 1px solid rgba(43, 124, 255, 0.4);
 }
