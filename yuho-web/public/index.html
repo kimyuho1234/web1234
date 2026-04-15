@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>김유호 포트폴리오</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js" defer></script>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">YUHO</div>
+        <nav class="nav">
+            <button class="nav_btn active" data-page="home">Home</button>
+            <button class="nav_btn" data-page="about">About</button>
+            <button class="nav_btn" data-page="skills">Skills</button>
+            <button class="nav_btn" data-page="portfolio">Portfolio</button>
+            <button class="nav_btn" data-page="contact">Contact</button>
+            <button class="nav_btn" data-page="board">Board</button>
+        </nav>
+        <button id="themebtn">dark모드</button>
+    </header>
+    <main class="main">
+        <section class="page active" id="home">
+            <p class="small_title">PORTFOLIO</p>
+            <h1>
+                안녕하세요,<br>
+                <span class="name" id="myName" style="cursor:pointer;"> 👉김유호</span>
+                입니다
+            </h1>
+            <div id="myInfo" class="card" style="display:none; margin-top:20px;">
+                <p>🎂 생년월일: 2009.10.29</p>
+                <p>📞 전화번호: 010-xxxx-xxxx</p>
+                <p>🏠 사는곳: 서울특별시 용산구 후암동</p>
+            </div>
+            <p id="typing" class="typing_text"></p>
+        </section>
+        <section class="page" id="about">
+            <h2>About</h2>
+            <div class="card">
+                <p>
+                    🎮 좋아하는 게임:
+                    <a href="https://playvalorant.com/ko-kr/" target="_blank" class="about_link">발로란트</a>,
+                    <a href="https://www.ubisoft.com/ko-kr/game/rainbow-six/siege" target="_blank" class="about_link">레인보우식스 시즈X</a>,
+                    <a href="https://www.fortnite.com/" target="_blank" class="about_link">포트나이트</a>,
+                    <a href="https://pubg.com/ko/main" target="_blank" class="about_link">배틀그라운드</a>,
+                    <a href="https://www.playdeltaforce.com/ko/" target="_blank" class="about_link">델타포스</a>
+                    <br>
+                    🍣 좋아하는 음식:
+                    <a href="https://namu.wiki/w/%EC%97%B0%EC%96%B4" target="_blank" class="about_link">연어</a>
+                    <br>
+                    ⚾ 좋아하는 야구팀:
+                    <a href="https://www.samsunglions.com/index.asp" target="_blank" class="about_link">삼성 라이온즈</a>
+                    <br>
+                    ⭐ 좋아하는 아이돌:
+                    <a href="https://www.youtube.com/@QWER_Band_official" target="_blank" class="about_link">QWER</a>,
+                    <a href="https://www.youtube.com/@hearts2hearts.official" target="_blank" class="about_link">Hearts2Hearts</a>,
+                    <a href="https://www.youtube.com/@fromis9_official" target="_blank" class="about_link">fromis_9</a>
+                    <br>
+                    🎧 요즘 좋아하는 노래:
+                    <a href="https://www.youtube.com/watch?v=F7sGJVUrkjQ" target="_blank" class="about_link">Hearts2Hearts - RUDE!</a>,
+                    <a href="https://www.youtube.com/watch?v=PRH8JkIe0Ho" target="_blank" class="about_link">QWER - 행복해져라</a>,
+                    <a href="https://www.youtube.com/watch?v=NOiyDlWl534" target="_blank" class="about_link">YENA(최예나) - 캐치 캐치 (Catch Catch)</a>
+                </p>
+            </div>
+        </section>
+        <section class="page" id="skills">
+            <h2>Skills</h2>
+            <div class="card">
+                <div class="skill_item">
+                    <div class="skill_top"><span>HTML</span><span>85%</span></div>
+                    <div class="bar">
+                        <div class="fill html"></div>
+                    </div>
+                </div>
+                <div class="skill_item">
+                    <div class="skill_top"><span>CSS</span><span>75%</span></div>
+                    <div class="bar">
+                        <div class="fill css"></div>
+                    </div>
+                </div>
+                <div class="skill_item">
+                    <div class="skill_top"><span>JavaScript</span><span>20%</span></div>
+                    <div class="bar">
+                        <div class="fill js"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="page" id="portfolio">
+            <h2>Portfolio</h2>
+            <div class="portfolio_wrap">
+                <div class="portfolio_card">
+                    <h3>자기소개 웹페이지</h3>
+                    <p>HTML, CSS, JavaScript로 만든 포트폴리오 웹페이지입니다.</p>
+                </div>
+                <div class="portfolio_card">
+                    <h3>추가 예정</h3>
+                    <p>앞으로 다양한 프로젝트를 통해 이 공간을 계속 채워나갈 예정입니다.</p>
+                </div>
+            </div>
+        </section>
+        <section class="page" id="contact">
+            <h2>Contact</h2>
+            <div class="card">
+                <p>
+                    Instagram:
+                    <a href="https://www.instagram.com/k_yuho123/?next=%2Fk_yuho123%2F" target="_blank" class="about_link">k_yuho123</a>
+                </p>
+                <p>Email: sdh250108@sdh.hs.kr</p>
+            </div>
+        </section>
+        <section class="page" id="board">
+            <div class="board_shell">
+                <div class="board_topbar">
+                    <h2 class="board_page_title">POSTS</h2>
+                    <button class="write_btn" id="openWriteBtn">🖊️ 글쓰기</button>
+                </div>
+                <div id="boardEmptyState" class="board_empty_state">
+                    <div class="empty_icon">📝</div>
+                    <p>아직 작성된 글이 없어요.</p>
+                    <p>첫 번째 글을 남겨보세요!</p>
+                </div>
+                <div id="boardListWrap" class="board_list_wrap hidden">
+                    <div id="postList" class="post_grid"></div>
+                </div>
+                <div id="boardWriteWrap" class="board_write_wrap hidden">
+                    <div class="card board_write_card">
+                        <div class="board_write_top">
+                            <h3>새 글 작성</h3>
+                            <button type="button" class="board_cancel_btn" id="closeWriteBtn">닫기</button>
+                        </div>
+                        <form id="postForm">
+                            <input type="text" id="title" placeholder="제목을 입력하세요" required>
+                            <textarea id="content" placeholder="내용을 입력하세요" required></textarea>
+                            <button type="submit" class="board_submit">등록</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
