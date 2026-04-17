@@ -49,12 +49,19 @@ const boardListWrap = document.getElementById("boardListWrap");
 const boardWriteWrap = document.getElementById("boardWriteWrap");
 
 function toggleWriteMode(show) {
-    boardWriteWrap.classList.toggle("hidden", !show);
-    boardListWrap.classList.toggle("hidden", show);
+    boardWriteWrap?.classList.toggle("hidden", !show);
+    boardListWrap?.classList.toggle("hidden", show);
+
+    if (show) {
+        boardEmptyState?.classList.add("hidden");
+    } else {
+        const hasPosts = postList && postList.children.length > 0;
+        boardEmptyState?.classList.toggle("hidden", hasPosts);
+        boardListWrap?.classList.toggle("hidden", !hasPosts);
+    }
 }
 
 document.getElementById("openWriteBtn")?.addEventListener("click", () => toggleWriteMode(true));
-document.getElementById("closeWriteBtn")?.addEventListener("click", () => toggleWriteMode(false));
 
 async function loadPosts() {
     try {
@@ -78,16 +85,37 @@ async function loadPosts() {
 
 postForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const title = document.getElementById("title").value;
-    const content = document.getElementById("content").value;
-    await fetch('/api/posts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, content })
-    });
-    postForm.reset();
-    toggleWriteMode(false);
-    loadPosts();
+
+    const title = document.getElementById("title").value.trim();
+    const content = document.getElementById("content").value.trim();
+
+    if (!title || !content) {
+        alert("제목과 내용을 입력해주세요.");
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/posts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, content })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            alert(data.message || "등록에 실패했습니다.");
+            return;
+        }
+
+        postForm.reset();
+        toggleWriteMode(false);
+        await loadPosts();
+        alert("게시글이 등록되었습니다.");
+    } catch (error) {
+        console.error(error);
+        alert("서버 연결에 실패했습니다. Live Server 말고 Vercel dev로 실행해보세요.");
+    }
 });
 
 loadPosts();

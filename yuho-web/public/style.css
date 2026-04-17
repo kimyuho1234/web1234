@@ -344,13 +344,6 @@ body.dark #postForm textarea {
     font-weight: bold;
 }
 
-.board_cancel_btn {
-    background: transparent;
-    border: none;
-    color: #ff4d4d;
-    cursor: pointer;
-}
-
 /* 핵심 유틸리티 */
 .hidden {
     display: none !important;
@@ -370,4 +363,35 @@ body.dark #postForm textarea {
         flex-direction: column;
         gap: 10px;
     }
+}
+
+.board_write_wrap {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 20px;
+}
+
+.board_write_card {
+    width: min(700px, 100%);
+    margin: 0;
+    border-radius: 24px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+}
+
+.board_write_top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+}
+
+.board_write_top h3 {
+    color: #2b7cff;
+    margin: 0;
+    font-size: 28px;
 }
