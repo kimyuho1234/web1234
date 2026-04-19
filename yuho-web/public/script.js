@@ -1,14 +1,14 @@
 // 타이핑 효과
-const typingText = "웹 개발을 배우고 있는 학생으로, 꾸준히 성장하는 프론트엔드 개발자를 목표로 합니다.";
+const typingText = "웹 개발을 배우고 있는 학생으로, 다양한 기술을 익히며 꾸준히 성장하는 프론트엔드 개발자를 목표로 하고 있습니다.";
 const typingTarget = document.getElementById("typing");
 let index = 0, isDeleting = false;
 
 function typingLoop() {
     if (!typingTarget) return;
-    const currentText = isDeleting ? typingText.substring(0, index--) : typingText.substring(0, index++);
+    const currentText = isDeleting ? typingText.substring(0, --index) : typingText.substring(0, index++);
     typingTarget.textContent = currentText;
-    if (!isDeleting && index > typingText.length) { isDeleting = true; setTimeout(typingLoop, 2000); return; }
-    if (isDeleting && index === 0) isDeleting = false;
+    if (!isDeleting && index > typingText.length) { isDeleting = true; setTimeout(typingLoop, 3000); return; }
+    if (isDeleting && index === 0) {isDeleting = false; setTimeout(typingLoop, 3000); return;};
     setTimeout(typingLoop, isDeleting ? 50 : 100);
 }
 typingLoop();

@@ -103,8 +103,8 @@ body.dark .nav_btn:hover {
 .board_submit:hover,
 .write_btn:hover,
 .board_cancel_btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(43, 124, 255, 0.28);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(43, 124, 255, 0.28);
 }
 
 /* 메인 레이아웃 */
@@ -168,7 +168,9 @@ h2 {
     position: relative;
     display: inline-block;
     color: #2b7cff;
-    text-shadow: 0 0 5px rgba(43, 124, 255, 0.6);
+    text-shadow: 
+        0 0 5px rgba(43, 124, 255, 0.6),
+        0 0 10px rgba(0, 198, 255, 0.5);
     animation: colorShift 3s ease-in-out infinite;
 }
 
@@ -184,6 +186,28 @@ h2 {
     }
 }
 
+.name::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -10%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.7), transparent);
+    transform: skewX(-20deg);
+    animation: shineText 2.5s linear infinite;
+}
+
+@keyframes shineText {
+  0% {
+    left: -10%;
+  }
+
+  100% {
+    left: 130%;
+  }
+}
+
 .typing_text {
     font-size: 22px;
     color: #666;
@@ -194,6 +218,26 @@ body.dark .typing_text {
     color: #bbb;
 }
 
+#typing::after {
+  content: "|";
+  margin-left: 4px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 /* 카드 디자인 */
 .card,
 .portfolio_card {
@@ -202,7 +246,6 @@ body.dark .typing_text {
     background: rgba(255, 255, 255, 0.72);
     padding: 30px;
     border-radius: 24px;
-    height: 232.94px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.45);
     backdrop-filter: blur(14px);
@@ -215,12 +258,10 @@ body.dark .typing_text {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        120deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.22) 35%,
-        transparent 70%
-    );
+    background: linear-gradient(120deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.22) 35%,
+            transparent 70%);
     transform: translateX(-100%);
     transition: transform 0.8s ease;
 }
@@ -251,9 +292,11 @@ body.dark .portfolio_card {
     color: #2b7cff;
     font-weight: 700;
     text-decoration: none;
+    transition: 0.2s ease;
 }
 
 .about_link:hover {
+    color: #00c6ff;
     text-decoration: underline;
 }
 
@@ -279,7 +322,11 @@ body.dark .portfolio_card {
 
 .fill {
     height: 100%;
+    border-radius: 999px;
+    position: relative;
+    overflow: hidden;
     background: linear-gradient(90deg, #2b7cff, #00c6ff);
+    box-shadow: 0 0 10px rgba(43, 124, 255, 0.6);
 }
 
 .fill.html {
@@ -292,6 +339,28 @@ body.dark .portfolio_card {
 
 .fill.js {
     width: 20%;
+}
+
+.fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.8), transparent);
+  transform: skewX(-20deg);
+  animation: shineColor 2.5s linear infinite;
+}
+
+@keyframes shineColor {
+  0% {
+    left: -40%;
+  }
+
+  100% {
+    left: 120%;
+  }
 }
 
 /* 게시판 스타일 */
@@ -405,13 +474,24 @@ body.dark #postForm textarea {
 
 .board_write_wrap {
     position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
+    top: 0;
+    /* 추가: 화면 맨 위부터 시작 */
+    left: 0;
+    /* 추가: 화면 맨 왼쪽부터 시작 */
+    width: 100%;
+    /* 수정: 전체 너비 */
+    height: 100%;
+    /* 추가: 전체 높이 */
+    background: rgba(0, 0, 0, 0.6);
+    /*배경을 조금 더 어둡게 하면 집중도가 높습니다 */
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 999;
+    z-index: 9999;
+    /* 다른 요소보다 확실히 위에 오도록 */
     padding: 20px;
+    backdrop-filter: blur(5px);
+    /* 배경 흐림 효과 추가 */
 }
 
 .board_write_card {
