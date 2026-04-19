@@ -288,6 +288,22 @@ body.dark .portfolio_card {
     gap: 18px;
 }
 
+.portfolio_card{
+    background: white;
+    padding: 28px;
+    border-radius: 22px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.portfolio_card {
+  transition: transform 0.24s ease, box-shadow 0.24s ease;
+}
+
+.portfolio_card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 35px rgba(43, 124, 255, 0.16);
+}
+
 .about_link {
     color: #2b7cff;
     font-weight: 700;
