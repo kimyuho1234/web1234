@@ -519,51 +519,44 @@ body.dark #postForm textarea {
     margin: 0;
     font-size: 28px;
 }
-/* 수정/삭제 버튼 컨테이너 */
+/* 게시글 버튼 컨테이너 */
 .post_btns {
     display: flex;
     gap: 8px;
+    margin-top: 10px;
 }
 
+/* 수정 및 삭제 버튼 공통 디자인 (이미지 스타일 반영) */
 .post_btns button {
-    padding: 5px 12px;
-    border: 1px solid #e0e0e0;
-    background-color: #fff;
-    border-radius: 4px;
-    font-size: 0.8rem;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 50px; /* 아주 둥근 캡슐 모양 */
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: white; /* 글자색 하얀색 */
     cursor: pointer;
-    transition: all 0.2s ease;
-    font-weight: 500;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+    transition: transform 0.2s, opacity 0.2s;
+    
+    /* 파란색 그라데이션 배경 */
+    background: linear-gradient(135deg, #3a8dff 0%, #15c2ff 100%);
 }
 
-/* 수정 버튼: 부드러운 블루 */
-.edit_btn:hover {
-    background-color: #f0f7ff;
-    border-color: #007bff;
-    color: #007bff;
+/* 버튼 위에 마우스를 올렸을 때 효과 */
+.post_btns button:hover {
+    transform: translateY(-2px); /* 살짝 위로 떠오름 */
+    opacity: 0.9;
 }
 
-/* 삭제 버튼: 부드러운 레드 */
-.del_btn:hover {
-    background-color: #fff5f5;
-    border-color: #ff4d4f;
-    color: #ff4d4f;
+/* 버튼을 클릭했을 때 효과 */
+.post_btns button:active {
+    transform: translateY(0);
 }
 
-/* 다크모드에서의 버튼 스타일 */
+/* 다크모드에서도 버튼 디자인 유지 (이미지 스타일이 밝은 톤이므로 유지하는 게 예쁩니다) */
 body.dark .post_btns button {
-    background-color: #333;
-    border-color: #555;
-    color: #eee;
-}
-
-body.dark .edit_btn:hover {
-    background-color: #1a3a5a;
-    border-color: #3d8bff;
-}
-body.dark .del_btn:hover {
-    background-color: #5a1a1a;
-    border-color: #ff7875;
+    background: linear-gradient(135deg, #3a8dff 0%, #15c2ff 100%);
+    color: white;
 }
 
 /* 닫기 버튼: 다크모드 자동 대응 */
