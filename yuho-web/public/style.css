@@ -529,3 +529,36 @@ body.dark #postForm textarea {
     margin: 0;
     font-size: 28px;
 }
+/* 게시글 카드 내 버튼 스타일 예시 */
+.post_controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.edit_btn, .delete_btn {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+}
+
+.delete_btn {
+    color: #ff4d4d;
+}
+
+/* 기본 상태 (라이트모드) */
+#closeWriteBtn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #000; /* 기본 검정색 */
+}
+
+/* 다크모드 활성화 시 */
+body.dark #closeWriteBtn {
+    color: #fff; /* 하얀색으로 변경 */
+}

@@ -43,7 +43,8 @@
                 <p>
                     🎮 좋아하는 게임:
                     <a href="https://playvalorant.com/ko-kr/" target="_blank" class="about_link">발로란트</a>,
-                    <a href="https://www.ubisoft.com/ko-kr/game/rainbow-six/siege" target="_blank" class="about_link">레인보우식스 시즈X</a>,
+                    <a href="https://www.ubisoft.com/ko-kr/game/rainbow-six/siege" target="_blank"
+                        class="about_link">레인보우식스 시즈X</a>,
                     <a href="https://www.fortnite.com/" target="_blank" class="about_link">포트나이트</a>,
                     <a href="https://pubg.com/ko/main" target="_blank" class="about_link">배틀그라운드</a>,
                     <a href="https://www.playdeltaforce.com/ko/" target="_blank" class="about_link">델타포스</a>
@@ -56,13 +57,17 @@
                     <br>
                     ⭐ 좋아하는 아이돌:
                     <a href="https://www.youtube.com/@QWER_Band_official" target="_blank" class="about_link">QWER</a>,
-                    <a href="https://www.youtube.com/@hearts2hearts.official" target="_blank" class="about_link">Hearts2Hearts</a>,
+                    <a href="https://www.youtube.com/@hearts2hearts.official" target="_blank"
+                        class="about_link">Hearts2Hearts</a>,
                     <a href="https://www.youtube.com/@fromis9_official" target="_blank" class="about_link">fromis_9</a>
                     <br>
                     🎧 요즘 좋아하는 노래:
-                    <a href="https://www.youtube.com/watch?v=F7sGJVUrkjQ" target="_blank" class="about_link">Hearts2Hearts - RUDE!</a>,
-                    <a href="https://www.youtube.com/watch?v=PRH8JkIe0Ho" target="_blank" class="about_link">QWER - 행복해져라</a>,
-                    <a href="https://www.youtube.com/watch?v=NOiyDlWl534" target="_blank" class="about_link">YENA(최예나) - 캐치 캐치(Catch Catch)</a>
+                    <a href="https://www.youtube.com/watch?v=F7sGJVUrkjQ" target="_blank"
+                        class="about_link">Hearts2Hearts - RUDE!</a>,
+                    <a href="https://www.youtube.com/watch?v=PRH8JkIe0Ho" target="_blank" class="about_link">QWER -
+                        행복해져라</a>,
+                    <a href="https://www.youtube.com/watch?v=NOiyDlWl534" target="_blank" class="about_link">YENA(최예나) -
+                        캐치 캐치(Catch Catch)</a>
                 </p>
             </div>
         </section>
@@ -90,7 +95,8 @@
                 </div>
                 <div class="skill_item">
                     <div class="skill_top">
-                        <span><a href="https://namu.wiki/w/JavaScript" target="_blank" class="about_link">JavaScript</a></span>
+                        <span><a href="https://namu.wiki/w/JavaScript" target="_blank"
+                                class="about_link">JavaScript</a></span>
                         <span>20%</span>
                     </div>
                     <div class="bar">
@@ -117,7 +123,8 @@
             <h2>Contact</h2>
             <div class="card">
                 <p>
-                    Instagram: <a href="https://www.instagram.com/k_yuho123/?next=%2Fk_yuho123%2F" target="_blank" class="about_link">k_yuho123</a>
+                    Instagram: <a href="https://www.instagram.com/k_yuho123/?next=%2Fk_yuho123%2F" target="_blank"
+                        class="about_link">k_yuho123</a>
                 </p>
                 <p>Email: sdh250108@sdh.hs.kr</p>
             </div>
@@ -128,20 +135,40 @@
                     <h2 class="board_page_title">POSTS</h2>
                     <button class="write_btn" id="openWriteBtn">🖊️ 글쓰기</button>
                 </div>
+
+                <!-- 게시글이 없을 때 -->
                 <div id="boardEmptyState" class="board_empty_state">
                     <div class="empty_icon">📝</div>
                     <p>아직 작성된 글이 없어요.</p>
                     <p>첫 번째 글을 남겨보세요!</p>
                 </div>
+
+                <!-- 게시글 목록 -->
                 <div id="boardListWrap" class="board_list_wrap hidden">
-                    <div id="postList" class="post_grid"></div>
+                    <div id="postList" class="post_grid">
+                        <!-- 자바스크립트에서 수정/삭제 버튼이 포함된 카드가 생성될 곳입니다 -->
+                    </div>
                 </div>
+                
+                <!-- 글 작성 창 -->
                 <div id="boardWriteWrap" class="board_write_wrap hidden">
                     <div class="card board_write_card">
-                        <div class="board_write_top">
+                        <div class="board_write_top"
+                            style="display: flex; justify-content: space-between; align-items: center;">
                             <h3>새 글 작성</h3>
+                            <!-- 닫기 버튼 추가 -->
+                            <button id="closeWriteBtn"
+                                style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
                         </div>
                         <form id="postForm">
+                            <!-- 작성자 입력란 및 익명 체크박스 추가 -->
+                            <div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
+                                <input type="text" id="author" placeholder="작성자 이름" style="flex: 1;" required>
+                                <label style="font-size: 0.9rem; white-space: nowrap;">
+                                    <input type="checkbox" id="isAnonymous"> 익명
+                                </label>
+                            </div>
+
                             <input type="text" id="title" placeholder="제목을 입력하세요" required>
                             <textarea id="content" placeholder="내용을 입력하세요" required></textarea>
                             <button type="submit" class="board_submit">등록</button>
