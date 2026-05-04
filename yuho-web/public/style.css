@@ -536,10 +536,8 @@ body.dark #postForm textarea {
     color: white; /* 글자색 하얀색 */
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
-    transition: transform 0.2s, opacity 0.2s;
-    
-    /* 파란색 그라데이션 배경 */
-    background: linear-gradient(135deg, #3a8dff 0%, #15c2ff 100%);
+    transition: transform 0.2s;                                            
+    background: linear-gradient(135deg, #3a8dff 0%, #15c2ff 100%); /* 파란색 그라데이션 배경 */
 }
 
 /* 버튼 위에 마우스를 올렸을 때 효과 */
